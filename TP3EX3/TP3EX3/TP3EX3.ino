@@ -1,34 +1,27 @@
-#define LEDPIN 12
+#define LDRPIN A2
+#define PINPIEZO 7
 #define BUTTONPIN 5
-#define LDRPIN 2 
-#define VOLTAGE 5
+#define LDRMAX 1200
+#define R2 48
+#define a 7.96
 
-bool buttonRead(int buttonPin){
-  return digitalRead(buttonPin);
-}
+#define LEDPIN 12
 
-int LDRRead10bit(){
-  return analogRead(LDRPIN);
-} 
+#include "SA_TP3.h"
+#include "SA_TP3.cpp"
 
-void lightLED(){
-  
-}
+TP3 tp3(LDRPIN, LDRMAX, R2, a, PINPIEZO)
   
 void setup() {
   Serial.begin(115200);
-  pinMode(LEDPIN, OUTPUT);
-  pinMode(BUTTONPIN, INPUT_PULLUP);
-  pinMode(LDRPIN, INPUT);
+
 }
 
 void loop() {
-  bool buttonState = buttonRead(BUTTONPIN);
+  bool buttonState = tp3.buttonRead(BUTTONPIN);
   while(buttonState == LOW){
     delay(100);
-    Serial.println("Luminosity level: " + String(LDRRead10bit()));
+    Serial.println("Luminosity level: " + String(tp3.LDRRead10bit()));
     buttonState = HIGH;
   }
 }
-
-
