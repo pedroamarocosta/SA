@@ -1,28 +1,32 @@
-#define buttonPin 4     // the number of the pushbutton pin
-#define ledPin 13      // the number of the LED pin
+#include <TP3.h>
 
-bool buttonRead(){
-  return digitalRead(buttonPin);
-}
+#define LDRPIN A2
+#define PIEZOPIN 7
+#define BUTTONPIN 4
+#define LEDPIN 5
+#define POTPIN A1
+#define LDRMAX 1200
+#define POTMAX 1.1
+#define R2 48
+#define a 7.96
 
-void EX1(){
-  bool buttonState = buttonRead();
-  if(buttonState == LOW){ //pullup
-    Serial.println("Button is pressed");
-  }else{
-    Serial.println("Button is not pressed");
-  }
-  delay(100);
- }
+TP3 tp3(LDRPIN, PIEZOPIN, BUTTONPIN, LEDPIN, POTPIN,  LDRMAX, POTMAX, R2, a);
   
 void setup() {
   Serial.begin(115200);
-  pinMode(buttonPin, INPUT_PULLUP);
-  pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
-  EX1();
-  //EX2();
   
+  bool buttonState = tp3.buttonRead();
+  if(buttonState == LOW){
+    Serial.println("Button is pressed");
+  }
+  
+  delay(100);
+  
+  char validChar = 't';
+  bool isCharReceived = tp3.uartRead(validChar);
+  if(isCharReceived){
+    Serial.println("Valid char received");}
 }
